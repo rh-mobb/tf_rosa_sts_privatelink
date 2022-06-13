@@ -1,6 +1,6 @@
 variable "cluster_name" {
   type        = string
-  default     = "cattle"
+  default     = "rosa_prvlnk_sts"
   description = "ROSA cluster name"
 }
 variable "region" {
@@ -8,7 +8,11 @@ variable "region" {
   default     = "us-east-2"
   description = "ROSA cluster region"
 }
-
+variable "bastion_key_loc" {
+  type        = string
+  default     = "~/.ssh/id_rsa.pub"
+  description = "Public key for bastion host"
+}
 variable "vpc_cidr_block" {
   type        = string
   default     = "10.1.0.0/16"
