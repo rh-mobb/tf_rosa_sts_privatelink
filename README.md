@@ -28,6 +28,7 @@ Using the code in the repo will require having the following tools installed:
 - The OC CLI
 
 update Terraform var file and run the script
+
 ```
 terraform init
 terraform apply -auto-approve
@@ -40,10 +41,9 @@ use subnet id from Terraform output to deploy ROSA cluster
 1. Create ROSA cluster in the private subnet
 
     ```bash
-    rosa create cluster --private-link --sts --mode auto -y \
-      --cluster-name=$ROSA_CLUSTER_NAME \
-      --machine-cidr=10.1.0.0/16 \
-      --subnet-ids=<subnet ID from Terraform output>
+    rosa create cluster --cluster-name mhs-tf-rosa -mode auto --sts \
+    --machine-cidr 10.1.0.0/16 --service-cidr 172.30.0.0/16 --pod-cidr 10.128.0.0/14 --host-prefix 23 \
+    --private-link --subnet-ids <subnet ID from Terraform output> 
     ```
 
 ## Test Connectivity
