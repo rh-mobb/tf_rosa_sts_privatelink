@@ -83,7 +83,7 @@ use subnet id from Terraform output to deploy ROSA cluster
 1. Log into the cluster using oc login command from the create admin command above. ex.
 
     ```bash
-    oc login https://api.private-test.3d1n.p1.openshiftapps.com:6443 --username cluster-admin --password GQSGJ-daqfN-8QNY3-tS9gU
+    oc login https://api.$YOUR_OPENSHIFT_DNS:6443 --username cluster-admin --password xxxxxxxxxx
     ```
 
 1. Check that you can access the Console by opening the console url in your browser.
