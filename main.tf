@@ -121,5 +121,10 @@ output "bastion_ip_addr" {
     aws_instance.bastion.public_ip
 
   ] 
+  description = "Bastion host private and public IP"
+}
 
+output "rosa_prv_subnet" {
+  value = aws_subnet.rosa_prv_subnet.id
+  description = "ROSA private subnet id"
 }
