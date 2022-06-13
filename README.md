@@ -41,7 +41,7 @@ use subnet id from Terraform output to deploy ROSA cluster
 1. Create ROSA cluster in the private subnet
 
     ```bash
-    rosa create cluster --cluster-name mhs-tf-rosa -mode auto --sts \
+    rosa create cluster --cluster-name mhs-tf-rosa --mode auto -y --sts \
     --machine-cidr 10.1.0.0/16 --service-cidr 172.30.0.0/16 --pod-cidr 10.128.0.0/14 --host-prefix 23 \
     --private-link --subnet-ids <subnet ID from Terraform output> 
     ```
