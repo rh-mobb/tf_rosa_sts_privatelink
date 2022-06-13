@@ -11,7 +11,7 @@ In this series we use Terraform to provision all resources in AWS to deploy a RO
 
 ## Create the AWS Virtual Private Cloud (VPCs), Pub/Private Subnets and TGW 
 
-This terraform script provision 2 VPCs and 3 subnet as follows.
+This terraform script provision 2 VPCs and 3 subnet and 1 bastion host as follows.
 
 
 
