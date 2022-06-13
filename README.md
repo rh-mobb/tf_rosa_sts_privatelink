@@ -57,9 +57,9 @@ use subnet id from Terraform output to deploy ROSA cluster
 
 1. Note the DNS name of your private cluster, use the `rosa describe` command if needed
 
-  ```
-  rosa describe cluster -c private-link
-  ```
+   ```
+   rosa describe cluster -c $ROSA_CLUSTER_NAME
+   ```
 
 1. update /etc/hosts to point the openshift domains to localhost. Use the DNS of your openshift cluster as described in the previous step in place of `$YOUR_OPENSHIFT_DNS` below
 
