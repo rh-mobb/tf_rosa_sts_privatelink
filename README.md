@@ -68,7 +68,17 @@ use subnet id from Terraform output to deploy ROSA cluster
     127.0.0.1 console-openshift-console.apps.$YOUR_OPENSHIFT_DNS
     127.0.0.1 oauth-openshift.apps.$YOUR_OPENSHIFT_DNS
     ```
-1. associate cluster hosted zone to egress VPC
+1. find your cluster hosted zone($YOUR_OPENSHIFT_DNS) and associate egress VPC ($YOUR_CLUSTER_NAME.egress_vpc.<random string>) to it
+    ```
+    To associate additional VPCs with a private hosted zone using the Route 53 console
+    Sign in to the AWS Management Console and open the Route 53 console at https://console.aws.amazon.com/route53/.
+    In the navigation pane, choose ROSA cluster Hosted zones.
+    Choose the radio button for the private hosted zone that you want to associate more VPCs with.
+    Choose Edit.
+    Choose Add VPC.
+    Choose the Region and the ID of the VPC that you want to associate with this hosted zone.
+    To associate more VPCs with this hosted zone, repeat steps 5 and 6.
+    Choose Save changes.
 
 
 1. Use public IP address from Terraform output to connect to bastion host. SSH to that instance, tunneling traffic for the appropriate hostnames. Be sure to use your new/existing private key, the OpenShift DNS for `$YOUR_OPENSHIFT_DNS` and your jump host IP for `$YOUR_EC2_IP`
@@ -90,7 +100,7 @@ use subnet id from Terraform output to deploy ROSA cluster
         gunzip openshift-client-linux.tar.gz
         tar -xvf openshift-client-linux.tar
       ```
-      
+
 1. Log into the cluster using oc login command from the create admin command above. ex.
 
     ```bash
