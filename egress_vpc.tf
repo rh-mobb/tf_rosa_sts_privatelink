@@ -6,7 +6,7 @@ resource "aws_vpc" "egress_vpc" {
   enable_dns_hostnames = true
   enable_dns_support = true
   tags = {
-    Name = "${var.cluster_name}.egress_vpc.${random_string.cluster_random_suffix.id}"
+    Name = "${local.name}-egress"
   }
 }
 resource "aws_subnet" "egress_vpc_prv_subnet" {
@@ -14,7 +14,7 @@ resource "aws_subnet" "egress_vpc_prv_subnet" {
   cidr_block = var.egress_prv_subnet_cidr_block
   availability_zone = "us-east-2a"
   tags = {
-    Name = "${var.cluster_name}.egress_vpc_prv_subnet.${random_string.cluster_random_suffix.id}"
+    Name = "${local.name}-egress"
   }
 }
 resource "aws_subnet" "egress_vpc_pub_subnet" {
@@ -23,18 +23,15 @@ resource "aws_subnet" "egress_vpc_pub_subnet" {
   availability_zone = "us-east-2a"
   map_public_ip_on_launch = true
   tags = {
-    Name = "${var.cluster_name}.egress_vpc_pub_subnet.${random_string.cluster_random_suffix.id}"
+    Name = "${local.name}-egress"
   }
 }
-
-
-
 
 resource "aws_internet_gateway" "egress_vpc_gw" {
   vpc_id = aws_vpc.egress_vpc.id
 
   tags = {
-    Name = "${var.cluster_name}.egress_vpc_gw.${random_string.cluster_random_suffix.id}"
+    Name = "${local.name}-egress"
   }
 }
 
@@ -50,7 +47,7 @@ resource "aws_nat_gateway" "egress_vpc_nat" {
   subnet_id     = aws_subnet.egress_vpc_pub_subnet.id
 
   tags = {
-    Name = "${var.cluster_name}.egress_vpc_nat.${random_string.cluster_random_suffix.id}"
+    Name = "${local.name}-egress"
   }
 
   # To ensure proper ordering, it is recommended to add an explicit dependency
@@ -69,12 +66,12 @@ resource "aws_route_table" "egress_vpc_pub_rt" {
     cidr_block = var.rosa_subnet_cidr_block
     transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
   }
-   depends_on = [ 
+   depends_on = [
        aws_ec2_transit_gateway.rosa_transit_gateway
    ]
-   
+
   tags = {
-    Name = "${var.cluster_name}.egress_vpc_pub_rt.${random_string.cluster_random_suffix.id}"
+    Name = "${local.name}-egress"
   }
 }
 
@@ -94,12 +91,12 @@ resource "aws_route_table" "egress_vpc_prv_rt" {
     cidr_block = var.rosa_subnet_cidr_block
     transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
   }
-  depends_on = [ 
+  depends_on = [
        aws_ec2_transit_gateway.rosa_transit_gateway
   ]
-   
+
   tags = {
-    Name = "${var.cluster_name}.egress_vpc_prv_rt.${random_string.cluster_random_suffix.id}"
+    Name = "${local.name}-egress"
   }
 }
 

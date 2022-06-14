@@ -1,32 +1,25 @@
-
-
 # provider "aws" {
 #   # Configuration options
 # }
 # create a Random string
-resource "random_string" "cluster_random_suffix" {
-  length = 6
-  upper = false
-  special = false
+# resource "random_string" "cluster_random_suffix" {
+#   length = 6
+#   upper = false
+#   special = false
+# }
+
+locals {
+  name = "rosa-${var.cluster_name}"
 }
 
 
-
-
-
-#
-# # Creating a New Key
+# create bastion key
 resource "aws_key_pair" "bastion_key_pair" {
-
-  # Name of the Key
-  key_name   = "bastion_key_pair"
-
-  # Adding the SSH authorized key !
-  public_key = file("~/.ssh/id_rsa.pub")
+  key_name   = local.name
+  public_key = file(var.bastion_key_loc)
   tags = {
-    Name = "${var.cluster_name}.bastion_key_pair.${random_string.cluster_random_suffix.id}"
+    Name = local.name
   }
-  
  }
 
 # create security group for bastion host
@@ -39,7 +32,7 @@ resource "aws_security_group" "bastion_sg" {
   ]
 
   description = "to access to ROSA cluster"
-  name = "bastion-host-sg"
+  name = local.name
   vpc_id = aws_vpc.egress_vpc.id
 
   # Created an inbound rule for Bastion Host SSH
@@ -59,72 +52,98 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "${var.cluster_name}.bastion_sg.${random_string.cluster_random_suffix.id}"
+    Name = local.name
   }
+
 }
 
 # Creating an AWS instance for the batsion host
 resource "aws_instance" "bastion" {
-
   depends_on = [
     aws_vpc.egress_vpc,
     aws_subnet.egress_vpc_pub_subnet,
     aws_subnet.egress_vpc_prv_subnet,
     aws_security_group.bastion_sg,
   ]
-  
-  # AMI ID [I have used my custom AMI which has some softwares pre installed]
-  ami = "ami-0fa49cc9dc8d62c84"
-  instance_type = "t2.micro"
+  ami = var.bastion_ami
+  instance_type = var.bastion_instance_type
   subnet_id = aws_subnet.egress_vpc_pub_subnet.id
+  key_name = aws_key_pair.bastion_key_pair.key_name
 
-  # Keyname and security group are obtained from the reference of their instances created above!
-  # Here I am providing the name of the key which is already uploaded on the AWS console.
-  key_name = "bastion_key_pair"
-  
   # Security groups to use!
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
 
   tags = {
-    Name = "${var.cluster_name}.bastion.${random_string.cluster_random_suffix.id}"
+    Name = local.name
   }
 
-  # Installing required softwares into the system!
-#   connection {
-#     type = "ssh"
-#     user = "ec2-user"
-#     private_key = file("/Users/mhs/.ssh")
-#     host = aws_instance.webserver.public_ip
-#   }
+  user_data = <<EOF
+#!/bin/bash
+set -e -x
 
-  # Code for installing the softwares!
-#   provisioner "remote-exec" {
-#     inline = [
-#         "sudo yum update -y",
-#         "sudo yum install php php-mysqlnd httpd -y",
-#         "wget https://wordpress.org/wordpress-4.8.14.tar.gz",
-#         "tar -xzf wordpress-4.8.14.tar.gz",
-#         "sudo cp -r wordpress /var/www/html/",
-#         "sudo chown -R apache.apache /var/www/html/",
-#         "sudo systemctl start httpd",
-#         "sudo systemctl enable httpd",
-#         "sudo systemctl restart httpd"
-#     ]
-#   }
+sudo dnf install -y wget curl python36 python36-devel net-tools gcc libffi-devel openssl-devel jq bind-utils podman
+
+# mitmproxy
+
+wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
+
+mkdir openshift
+tar -zxvf openshift-client-linux.tar.gz -C openshift
+sudo install openshift/oc /usr/local/bin/oc
+sudo install openshift/kubectl /usr/local/bin/kubectl
+EOF
+
 }
 
 
-#### output 
-output "bastion_ip_addr" {
-  value = [ 
-    aws_instance.bastion.private_ip,
-    aws_instance.bastion.public_ip
+#### output
+# output "bastion_ip_addr" {
+#   value = [
+#     aws_instance.bastion.private_ip,
+#     aws_instance.bastion.public_ip
 
-  ] 
-  description = "Bastion host private and public IP"
-}
+#   ]
+#   description = "Bastion host private and public IP"
+# }
 
-output "rosa_prv_subnet" {
-  value = aws_subnet.rosa_prv_subnet.id
-  description = "ROSA private subnet id"
+# output "rosa_prv_subnet" {
+#   value = aws_subnet.rosa_prv_subnet.id
+#   description = "ROSA private subnet id"
+# }
+
+output "next_steps" {
+  value = <<EOF
+
+
+***** Next steps *****
+
+* Create your ROSA cluster:
+$ rosa create cluster --cluster-name ${local.name} --mode auto --sts \
+  --machine-cidr ${var.rosa_subnet_cidr_block} --service-cidr 172.30.0.0/16 \
+  --pod-cidr 10.128.0.0/14 --host-prefix 23 --yes \
+  --private-link --subnet-ids ${aws_subnet.rosa_prv_subnet.id}
+
+* create a route53 zone association for the egress vpc
+$ ZONE=$(aws route53 list-hosted-zones-by-vpc --vpc-id ${aws_vpc.rosa_prvlnk_vpc.id} \
+    --vpc-region ${var.region} \
+    --query 'HostedZoneSummaries[*].HostedZoneId' --output text)
+  aws route53 associate-vpc-with-hosted-zone \
+      --hosted-zone-id $ZONE \
+      --vpc VPCId=${aws_vpc.egress_vpc.id},VPCRegion=${var.region} \
+      --output text
+
+* Create a sshuttle VPN via your bastion:
+$ sshuttle --dns -NHr ec2-user@${aws_instance.bastion.public_ip} 10.0.0.0/8
+
+* Create an Admin user:
+$ rosa create admin -c ${local.name}
+
+* Run the command provided above to log into the cluster
+
+* Find the URL of the cluster's console and log into it via your web browser
+$ rosa describe cluster -c mobb-infra -o json | jq -r .console.url
+
+
+EOF
+  description = "ROSA cluster creation command"
 }

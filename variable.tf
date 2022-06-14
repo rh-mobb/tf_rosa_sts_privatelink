@@ -3,16 +3,31 @@ variable "cluster_name" {
   default     = "rosa_prvlnk_sts"
   description = "ROSA cluster name"
 }
+
 variable "region" {
   type        = string
   default     = "us-east-2"
   description = "ROSA cluster region"
 }
+
 variable "bastion_key_loc" {
   type        = string
   default     = "~/.ssh/id_rsa.pub"
   description = "Public key for bastion host"
 }
+
+variable "bastion_ami" {
+  type        = string
+  default     = "ami-0ba62214afa52bec7"
+  description = "Bastion AMI"
+}
+
+variable "bastion_instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "Bastion instance type"
+}
+
 variable "vpc_cidr_block" {
   type        = string
   default     = "10.1.0.0/16"
@@ -21,7 +36,7 @@ variable "vpc_cidr_block" {
 
 variable "rosa_subnet_cidr_block" {
   type        = string
-  default     = "10.1.0.0/16"
+  default     = "10.1.0.0/20"
   description = "cidr range for rosa private vpc"
 }
 
