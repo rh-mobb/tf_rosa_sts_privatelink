@@ -68,6 +68,7 @@ use subnet id from Terraform output to deploy ROSA cluster
     127.0.0.1 console-openshift-console.apps.$YOUR_OPENSHIFT_DNS
     127.0.0.1 oauth-openshift.apps.$YOUR_OPENSHIFT_DNS
     ```
+1. associate cluster hosted zone to egress VPC
 
 
 1. Use public IP address from Terraform output to connect to bastion host. SSH to that instance, tunneling traffic for the appropriate hostnames. Be sure to use your new/existing private key, the OpenShift DNS for `$YOUR_OPENSHIFT_DNS` and your jump host IP for `$YOUR_EC2_IP`
@@ -79,7 +80,17 @@ use subnet id from Terraform output to deploy ROSA cluster
       -L 80:console-openshift-console.apps.$YOUR_OPENSHIFT_DNS:80 \
        ec2-user@$YOUR_EC2_IP
     ```
-
+1. From your EC2 jump instances, download the OC CLI and install it locally
+    - Download the OC CLI for Linux
+      ```
+      wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+      ```
+    - Unzip and untar the binary
+      ```
+        gunzip openshift-client-linux.tar.gz
+        tar -xvf openshift-client-linux.tar
+      ```
+      
 1. Log into the cluster using oc login command from the create admin command above. ex.
 
     ```bash
