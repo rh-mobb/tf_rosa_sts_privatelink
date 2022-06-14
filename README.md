@@ -9,7 +9,7 @@ NOTE: STS(secure token service) allows us to deploy ROSA without needing a ROSA 
 
 In this series, we use Terraform to provision all resources in AWS to deploy a ROSA cluster with Privatelink and STS.
 
-## Create the AWS Virtual Private Cloud (VPCs), Pub/Private Subnets and TGW 
+## Create the AWS Virtual Private Cloud (VPCs), Pub/Private Subnets and TGW
 
 This terraform script provisions 2 VPCs and 3 subnets and 1 bastion host as follows.
 
@@ -27,28 +27,31 @@ Using the code in the repo will require having the following tools installed:
 - The ROSA CLI
 - The OC CLI
 
-update Terraform var file and run the script
+## Create the VPCs
 
-```
-terraform init
-terraform apply -auto-approve
-```
+1. Modify the `variable.tf` var file, or modify the following command to customize your cluster.
 
-use subnet id from Terraform output to deploy ROSA cluster
+   ```
+   terraform init
+   tf plan -var "cluster_name=my-tf-cluster" -out rosa.plan
+   terraform apply rosa.plan
+   ```
 
 ## Deploy ROSA
 
 1. Create ROSA cluster in the private subnet
 
+   > The command provided in the Terraform output will create a private-link cluster in the private subnet.  It should look something like this:
+
     ```bash
-    rosa create cluster --cluster-name mhs-tf-rosa -mode auto --sts \
+    rosa create cluster --cluster-name mhs-tf-rosa -mode auto --sts --yes \
     --machine-cidr 10.1.0.0/16 --service-cidr 172.30.0.0/16 --pod-cidr 10.128.0.0/14 --host-prefix 23 \
-    --private-link --subnet-ids <subnet ID from Terraform output> 
+    --private-link --subnet-ids <subnet ID from Terraform output>
     ```
 
 ## Test Connectivity
 
- 
+
 1. Create a ROSA admin user and save the login command for use later
 
     ```
@@ -96,7 +99,7 @@ use subnet id from Terraform output to deploy ROSA cluster
     ```bash
     rosa delete cluster -c $ROSA_CLUSTER_NAME -y
     ```
-   
+
 1. Delete AWS resources
 
     ```bash

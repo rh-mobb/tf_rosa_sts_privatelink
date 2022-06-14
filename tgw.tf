@@ -6,10 +6,9 @@ resource "aws_ec2_transit_gateway" "rosa_transit_gateway" {
   dns_support = "enable"
   vpn_ecmp_support = "enable"
   tags = {
-    Name = "${var.cluster_name}.rosa_transit_gateway.${random_string.cluster_random_suffix.id}"
+    Name = "${var.cluster_name}-tgw"
   }
 }
-
 
 # attach tgw to vpc (it is mandatory before you update subnet route table)
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_rosa_vpc" {
@@ -20,7 +19,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_rosa_vpc" {
     aws_vpc.rosa_prvlnk_vpc
   ]
   tags = {
-    Name = "${var.cluster_name}.tgw_attach_rosa_vpc.${random_string.cluster_random_suffix.id}"
+    Name = "${var.cluster_name}-tgw"
   }
 }
 
@@ -33,7 +32,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_egress_vpc" {
   transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
   vpc_id             = aws_vpc.egress_vpc.id
   tags = {
-    Name = "${var.cluster_name}.tgw_attach_rosa_vpc.${random_string.cluster_random_suffix.id}"
+    Name = "${var.cluster_name}-tgw"
   }
 }
 
@@ -58,14 +57,14 @@ resource "aws_ec2_transit_gateway_route" "tgw_static_route" {
 #   destination_cidr_block         = "10.1.0.0/16"
 #   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_attach_rosa_vpc.id
 #   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
- 
+
 # }
 
 # resource "aws_ec2_transit_gateway_route" "tgw_egress_route" {
 #   destination_cidr_block         = "10.2.0.0/16"
 #   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_attach_egress_vpc.id
 #   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
- 
+
 # }
 
 
@@ -73,11 +72,11 @@ resource "aws_ec2_transit_gateway_route" "tgw_static_route" {
 # resource "aws_ec2_transit_gateway_route_table_association" "tgw_rt_rosa_association" {
 #   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_attach_rosa_vpc.id
 #   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
- 
+
 # }
 
 # resource "aws_ec2_transit_gateway_route_table_association" "tgw_rt_egress_association" {
 #   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_attach_egress_vpc.id
 #   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
- 
+
 # }
