@@ -44,7 +44,7 @@ Using the code in the repo will require having the following tools installed:
    > The command provided in the Terraform output will create a private-link cluster in the private subnet.  It should look something like this:
 
     ```bash
-    rosa create cluster --cluster-name mhs-tf-rosa -mode auto --sts --yes \
+    rosa create cluster --cluster-name mhs-tf-rosa --mode auto -y --sts \
     --machine-cidr 10.1.0.0/16 --service-cidr 172.30.0.0/16 --pod-cidr 10.128.0.0/14 --host-prefix 23 \
     --private-link --subnet-ids <subnet ID from Terraform output>
     ```
@@ -71,6 +71,17 @@ Using the code in the repo will require having the following tools installed:
     127.0.0.1 console-openshift-console.apps.$YOUR_OPENSHIFT_DNS
     127.0.0.1 oauth-openshift.apps.$YOUR_OPENSHIFT_DNS
     ```
+1. find your cluster hosted zone($YOUR_OPENSHIFT_DNS) and associate egress VPC ($YOUR_CLUSTER_NAME.egress_vpc.<random string>) to it
+    ```
+    To associate additional VPCs with a private hosted zone using the Route 53 console
+    Sign in to the AWS Management Console and open the Route 53 console at https://console.aws.amazon.com/route53/.
+    In the navigation pane, choose ROSA cluster Hosted zones.
+    Choose the radio button for the private hosted zone that you want to associate more VPCs with.
+    Choose Edit.
+    Choose Add VPC.
+    Choose the Region and the ID of the VPC that you want to associate with this hosted zone.
+    To associate more VPCs with this hosted zone, repeat steps 5 and 6.
+    Choose Save changes.
 
 
 1. Use public IP address from Terraform output to connect to bastion host. SSH to that instance, tunneling traffic for the appropriate hostnames. Be sure to use your new/existing private key, the OpenShift DNS for `$YOUR_OPENSHIFT_DNS` and your jump host IP for `$YOUR_EC2_IP`
@@ -82,6 +93,16 @@ Using the code in the repo will require having the following tools installed:
       -L 80:console-openshift-console.apps.$YOUR_OPENSHIFT_DNS:80 \
        ec2-user@$YOUR_EC2_IP
     ```
+1. From your EC2 jump instances, download the OC CLI and install it locally
+    - Download the OC CLI for Linux
+      ```
+      wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz
+      ```
+    - Unzip and untar the binary
+      ```
+        gunzip openshift-client-linux.tar.gz
+        tar -xvf openshift-client-linux.tar
+      ```
 
 1. Log into the cluster using oc login command from the create admin command above. ex.
 
