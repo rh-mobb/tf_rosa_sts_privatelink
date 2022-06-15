@@ -33,7 +33,7 @@ Using the code in the repo will require having the following tools installed:
 
    ```
    terraform init
-   tf plan -var "cluster_name=my-tf-cluster" -out rosa.plan
+   terraform plan -var "cluster_name=my-tf-cluster" -out rosa.plan
    terraform apply rosa.plan
    ```
 
