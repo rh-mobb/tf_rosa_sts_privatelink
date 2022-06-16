@@ -10,32 +10,18 @@ resource "aws_ec2_transit_gateway" "rosa_transit_gateway" {
   }
 }
 
-# attach tgw to vpc (it is mandatory before you update subnet route table)
-resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_rosa_vpc" {
-  subnet_ids         = [aws_subnet.rosa_prv_subnet.id]
-  transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
-  vpc_id             = aws_vpc.rosa_prvlnk_vpc.id
-  depends_on = [
-    aws_vpc.rosa_prvlnk_vpc
-  ]
-  tags = {
-    Name = "${var.cluster_name}-tgw"
-  }
-}
-
-# attach tgw to vpc (it is mandatory before you update subnet route table in the vpc)
-resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_egress_vpc" {
-  subnet_ids         = [
-      aws_subnet.egress_vpc_prv_subnet.id,
-#      aws_subnet.egress_vpc_prv_subnet.id
-  ]
-  transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
-  vpc_id             = aws_vpc.egress_vpc.id
-  tags = {
-    Name = "${var.cluster_name}-tgw"
-  }
-}
-
+# # attach tgw to vpc (it is mandatory before you update subnet route table)
+# resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_rosa_vpc" {
+#   subnet_ids         = [aws_subnet.rosa_prv_subnet.id]
+#   transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
+#   vpc_id             = aws_vpc.rosa_prvlnk_vpc.id
+#   depends_on = [
+#     aws_vpc.rosa_prvlnk_vpc
+#   ]
+#   tags = {
+#     Name = "${var.cluster_name}-tgw"
+#   }
+# }
 
 
 # resource "aws_ec2_transit_gateway_route_table" "tgw_route_table" {

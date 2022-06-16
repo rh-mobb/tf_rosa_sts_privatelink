@@ -63,7 +63,7 @@ resource "aws_route_table" "egress_vpc_pub_rt" {
     gateway_id = aws_internet_gateway.egress_vpc_gw.id
   }
   route {
-    cidr_block = var.rosa_subnet_cidr_block
+    cidr_block = var.tgw_cidr_block
     transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
   }
    depends_on = [
@@ -88,7 +88,7 @@ resource "aws_route_table" "egress_vpc_prv_rt" {
     nat_gateway_id = aws_nat_gateway.egress_vpc_nat.id
   }
   route {
-    cidr_block = var.rosa_subnet_cidr_block
+    cidr_block = var.tgw_cidr_block
     transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
   }
   depends_on = [
@@ -104,3 +104,22 @@ resource "aws_route_table_association" "egress_vpc_prv_rt_association" {
   subnet_id      = aws_subnet.egress_vpc_prv_subnet.id
   route_table_id = aws_route_table.egress_vpc_prv_rt.id
 }
+
+# attach tgw to vpc (it is mandatory before you update subnet route table in the vpc)
+resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_egress_vpc" {
+  subnet_ids         = [
+      aws_subnet.egress_vpc_prv_subnet.id,
+#      aws_subnet.egress_vpc_prv_subnet.id
+  ]
+  transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
+  vpc_id             = aws_vpc.egress_vpc.id
+  tags = {
+    Name = "${var.cluster_name}-tgw"
+  }
+}
+
+# resource "aws_ec2_transit_gateway_route" "tgw_egress_route" {
+#   destination_cidr_block         = "10.2.0.0/16"
+#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_attach_egress_vpc.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_route_table.id
+# }
