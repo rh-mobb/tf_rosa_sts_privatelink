@@ -4,7 +4,7 @@ resource "aws_key_pair" "bastion_key_pair" {
   key_name   = local.name
   public_key = file(var.bastion_key_loc)
   tags = {
-    Name = local.name
+    Name = "${local.name}_bastion_key_pair"
   }
  }
 
@@ -38,7 +38,7 @@ resource "aws_security_group" "bastion_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = local.name
+    Name = "${local.name}_bastion_sg"
   }
 
 }
@@ -60,7 +60,7 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
 
   tags = {
-    Name = local.name
+    Name = "${local.name}-bastion"
   }
 
   user_data = <<EOF
