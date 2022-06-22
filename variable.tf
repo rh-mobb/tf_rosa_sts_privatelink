@@ -1,6 +1,6 @@
 variable "cluster_name" {
   type        = string
-  default     = "rosa_prvlnk_sts"
+  default     = "mhs_rosa_1"
   description = "ROSA cluster name"
 }
 

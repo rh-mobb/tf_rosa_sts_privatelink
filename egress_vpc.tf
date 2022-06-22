@@ -35,25 +35,25 @@ resource "aws_internet_gateway" "egress_vpc_gw" {
   }
 }
 
-resource "aws_eip" "nat_gateway_eip" {
-#   depends_on = [
-#     aws_route_table_association.RT-IG-Association
-#   ]
-  vpc = true
-}
+# resource "aws_eip" "nat_gateway_eip" {
+# #   depends_on = [
+# #     aws_route_table_association.RT-IG-Association
+# #   ]
+#   vpc = true
+# }
 
-resource "aws_nat_gateway" "egress_vpc_nat" {
-  allocation_id = aws_eip.nat_gateway_eip.id
-  subnet_id     = aws_subnet.egress_vpc_pub_subnet.id
+# resource "aws_nat_gateway" "egress_vpc_nat" {
+#   allocation_id = aws_eip.nat_gateway_eip.id
+#   subnet_id     = aws_subnet.egress_vpc_pub_subnet.id
 
-  tags = {
-    Name = "${local.name}-egress"
-  }
+#   tags = {
+#     Name = "${local.name}-egress"
+#   }
 
-  # To ensure proper ordering, it is recommended to add an explicit dependency
-  # on the Internet Gateway for the VPC.
-  depends_on = [aws_internet_gateway.egress_vpc_gw]
-}
+#   # To ensure proper ordering, it is recommended to add an explicit dependency
+#   # on the Internet Gateway for the VPC.
+#   depends_on = [aws_internet_gateway.egress_vpc_gw]
+# }
 
 resource "aws_route_table" "egress_vpc_pub_rt" {
   vpc_id = aws_vpc.egress_vpc.id
@@ -85,7 +85,7 @@ resource "aws_route_table" "egress_vpc_prv_rt" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.egress_vpc_nat.id
+    network_interface_id = aws_network_interface.proxy_interface.id
   }
   route {
     cidr_block = var.tgw_cidr_block
