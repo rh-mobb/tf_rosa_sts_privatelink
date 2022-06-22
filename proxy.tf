@@ -4,6 +4,9 @@ resource "aws_network_interface" "proxy_interface" {
     # Important to disable this check to allow traffic not addressed to the
     # proxy to be received
     source_dest_check = false
+    tags = {
+        Name = "${local.name}_egress_proxy_interface"
+    }
 }
 
 resource "aws_instance" "egress_proxy" {
