@@ -2,14 +2,14 @@
 #   # Configuration options
 # }
 # create a Random string
-# resource "random_string" "cluster_random_suffix" {
-#   length = 6
-#   upper = false
-#   special = false
-# }
+resource "random_string" "cluster_random_suffix" {
+  length = 3
+  upper = false
+  special = false
+}
 
 locals {
-  name = "rosa-${var.cluster_name}"
+  name = "rosa-${var.cluster_name}-${random_string.cluster_random_suffix.id}"
 }
 
 
