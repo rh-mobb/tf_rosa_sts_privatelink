@@ -57,7 +57,7 @@ resource "aws_instance" "jumphost" {
   vpc_security_group_ids = [aws_security_group.jumphost[count.index].id]
 
   tags = {
-    Name = "local.name-jumphost"
+    Name = "${local.name}-jumphost"
   }
 
   user_data = <<EOF
