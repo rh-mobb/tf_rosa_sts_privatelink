@@ -1,5 +1,5 @@
 resource "aws_network_interface" "proxy_interface" {
-    subnet_id = "${var.subnet_id}"
+    subnet_id = aws_subnet.egress_vpc_pub_subnet.id
 
     # Important to disable this check to allow traffic not addressed to the
     # proxy to be received
@@ -29,5 +29,5 @@ output "proxy_public_ip" {
 }
 
 output "proxy_network_interface_id" {
-    value = "${aws_network_interface.egress_proxy.id}"
+    value = "${aws_network_interface.proxy_interface.id}"
 }
