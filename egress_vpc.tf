@@ -6,7 +6,7 @@ resource "aws_vpc" "egress_vpc" {
   enable_dns_hostnames = true
   enable_dns_support = true
   tags = {
-    Name = "${local.name}-egress"
+    Name = "${local.name}-egress-vpc"
   }
 }
 resource "aws_subnet" "egress_vpc_prv_subnet" {
@@ -14,7 +14,7 @@ resource "aws_subnet" "egress_vpc_prv_subnet" {
   cidr_block = var.egress_prv_subnet_cidr_block
   availability_zone = "us-east-2a"
   tags = {
-    Name = "${local.name}-egress"
+    Name = "${local.name}-egress-prv-subnet"
   }
 }
 resource "aws_subnet" "egress_vpc_pub_subnet" {
@@ -23,7 +23,7 @@ resource "aws_subnet" "egress_vpc_pub_subnet" {
   availability_zone = "us-east-2a"
   map_public_ip_on_launch = true
   tags = {
-    Name = "${local.name}-egress"
+    Name = "${local.name}-egress-vpc-pub-subnet"
   }
 }
 
@@ -31,7 +31,7 @@ resource "aws_internet_gateway" "egress_vpc_gw" {
   vpc_id = aws_vpc.egress_vpc.id
 
   tags = {
-    Name = "${local.name}-egress"
+    Name = "${local.name}-egress-vpc-gw"
   }
 }
 
@@ -71,7 +71,7 @@ resource "aws_route_table" "egress_vpc_pub_rt" {
    ]
 
   tags = {
-    Name = "${local.name}-egress"
+    Name = "${local.name}-egress-vpc-pub-rt"
   }
 }
 
@@ -96,7 +96,7 @@ resource "aws_route_table" "egress_vpc_prv_rt" {
   ]
 
   tags = {
-    Name = "${local.name}-egress"
+    Name = "${local.name}-egress-vpc-prv-rt"
   }
 }
 
@@ -114,7 +114,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_egress_vpc" {
   transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id
   vpc_id             = aws_vpc.egress_vpc.id
   tags = {
-    Name = "${var.cluster_name}-tgw"
+    Name = "${var.cluster_name}-tgw-attach-egress-vpc"
   }
 }
 
