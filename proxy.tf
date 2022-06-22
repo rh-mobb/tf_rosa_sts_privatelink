@@ -18,7 +18,7 @@ resource "aws_instance" "egress_proxy" {
         device_index = 0
     }
 
-    tags {
+    tags = {
         Name = "egress_proxy"
     }
 }
