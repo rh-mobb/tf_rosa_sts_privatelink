@@ -1,6 +1,6 @@
 variable "cluster_name" {
   type        = string
-  default     = "mhs_rosa_1"
+  default     = "mhs1"
   description = "ROSA cluster name"
 }
 
@@ -73,5 +73,5 @@ variable "tgw_cidr_block" {
 variable "enable_rosa_jumphost" {
   description = "If set to true, deploy a jumphost in the ROSA private subnet"
   type        = bool
-  default     = false
+  default     = true
 }

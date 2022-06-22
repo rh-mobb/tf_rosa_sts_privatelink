@@ -19,7 +19,7 @@ resource "aws_instance" "egress_proxy" {
     }
 
     tags = {
-        Name = "egress_proxy"
+        Name = "${local.name}_egress_proxy"
     }
 }
 
