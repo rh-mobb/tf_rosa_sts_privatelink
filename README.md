@@ -69,6 +69,7 @@ Using the code in the repo will require having the following tools installed:
    ```
 
 1. Create a route53 zone association for the egress VPC
+
    OPTION 1(CLI):
    ```
    ZONE=$(aws route53 list-hosted-zones-by-vpc --vpc-id vpc-04fd66db807b5a2af \
@@ -82,9 +83,11 @@ Using the code in the repo will require having the following tools installed:
     ```
 
     OPTION 2(GUI):
+
      find your cluster hosted zone($YOUR_OPENSHIFT_DNS) and associate egress VPC ($YOUR_CLUSTER_NAME.egress_vpc.<random string>) to it
     ```
-    To associate additional VPCs with a private hosted zone using the Route 53 console
+    To associate additional VPCs with a private hosted zone using the Route 53 console:
+    
     Sign in to the AWS Management Console and open the Route 53 console at https://console.aws.amazon.com/route53/.
     In the navigation pane, choose ROSA cluster Hosted zones.
     Choose the radio button for the private hosted zone that you want to associate more VPCs with.
