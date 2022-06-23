@@ -15,7 +15,7 @@ This terraform script provisions 2 VPCs(VPC for ROSA cluster and egress VPC), 3 
 
 
 
-![architecture diagram showing privatelink with TGW](./images/ROSA_PrivateLink_TGW_proxy.png)
+![architecture diagram showing privatelink with TGW](./images/ROSA_PrivateLink_TGW_Proxy.png)
 
 ## Setup
 
