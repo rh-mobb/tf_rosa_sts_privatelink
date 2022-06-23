@@ -24,7 +24,7 @@ variable "bastion_key_loc" {
 
 variable "bastion_ami" {
   type        = string
-  default     = "ami-0ba62214afa52bec7"
+  default     = "ami-0fa49cc9dc8d62c84"
   description = "Bastion AMI"
 }
 
