@@ -9,7 +9,7 @@ resource "aws_key_pair" "egress-proxy-key-pair" {
 
 resource "aws_network_interface" "egress_proxy_interface" {
     subnet_id = aws_subnet.egress_vpc_pub_subnet.id
-
+    security_groups = [aws_security_group.egress-proxy_sg.id]
     # Important to disable this check to allow traffic not addressed to the
     # proxy to be received
     source_dest_check = false
@@ -29,8 +29,11 @@ resource "aws_instance" "egress_proxy" {
         network_interface_id = "${aws_network_interface.egress_proxy_interface.id}"
         device_index = 0
     }
-# Security groups to use!
-   vpc_security_group_ids = [aws_security_group.egress-proxy_sg.id]
+# Security groups to use! 
+# if you define the network_interface block then 
+# you're overriding the default ENI and so can't
+#  specify security groups at the instance level
+#   vpc_security_group_ids = [aws_security_group.egress-proxy_sg.id]
 
     tags = {
         Name = "${local.name}_egress_proxy"
