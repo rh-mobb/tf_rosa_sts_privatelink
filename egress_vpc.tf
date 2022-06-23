@@ -23,7 +23,7 @@ resource "aws_subnet" "egress_vpc_pub_subnet" {
   availability_zone = "us-east-2a"
   map_public_ip_on_launch = true
   tags = {
-    Name = "${local.name}-egress-vpc-pub-subnet"
+    Name = "${local.name}-egress-pub-subnet"
   }
 }
 
@@ -85,7 +85,7 @@ resource "aws_route_table" "egress_vpc_prv_rt" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    network_interface_id = aws_network_interface.proxy_interface.id
+    network_interface_id = aws_network_interface.egress_proxy_interface.id
   }
   route {
     cidr_block = var.tgw_cidr_block
