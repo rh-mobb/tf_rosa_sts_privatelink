@@ -24,7 +24,7 @@ variable "bastion_key_loc" {
 
 variable "bastion_ami" {
   type        = string
-  default     = "ami-0fa49cc9dc8d62c84"
+  default     = "ami-0ba62214afa52bec7"
   description = "Bastion AMI"
 }
 
@@ -32,6 +32,18 @@ variable "bastion_instance_type" {
   type        = string
   default     = "t2.micro"
   description = "Bastion instance type"
+}
+
+variable "proxy_ami" {
+  type        = string
+  default     = "ami-0ba62214afa52bec7"
+  description = "Proxy AMI"
+}
+
+variable "proxy_instance_type" {
+  type        = string
+  default     = "m4.large"
+  description = "Proxy instance type"
 }
 
 variable "rosa_vpc_cidr_block" {

@@ -33,11 +33,11 @@ resource "aws_ec2_transit_gateway" "rosa_transit_gateway" {
 
 ### add route to tgw route table
 
-resource "aws_ec2_transit_gateway_route" "tgw_static_route" {
-  destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_attach_egress_vpc.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway.rosa_transit_gateway.association_default_route_table_id
-}
+# resource "aws_ec2_transit_gateway_route" "tgw_static_route" {
+#   destination_cidr_block         = "0.0.0.0/0"
+#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw_attach_egress_vpc.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway.rosa_transit_gateway.association_default_route_table_id
+# }
 
 # resource "aws_ec2_transit_gateway_route" "tgw_rosa_route" {
 #   destination_cidr_block         = "10.1.0.0/16"

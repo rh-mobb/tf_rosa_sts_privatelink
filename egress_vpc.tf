@@ -83,10 +83,10 @@ resource "aws_route_table_association" "egress_vpc_pub_rt_association" {
 resource "aws_route_table" "egress_vpc_prv_rt" {
   vpc_id = aws_vpc.egress_vpc.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    network_interface_id = aws_network_interface.egress_proxy_interface.id
-  }
+  # route {
+  #   cidr_block = "0.0.0.0/0"
+  #   network_interface_id = aws_network_interface.egress_proxy_interface.id
+  # }
   route {
     cidr_block = var.tgw_cidr_block
     transit_gateway_id = aws_ec2_transit_gateway.rosa_transit_gateway.id

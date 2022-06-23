@@ -34,7 +34,10 @@ $ rosa create cluster --cluster-name ${local.name} --mode auto --sts \
   --machine-cidr ${module.rosa-privatelink-vpc.rosa_vpc_cidr} --service-cidr 172.30.0.0/16 \
   --pod-cidr 10.128.0.0/14 --host-prefix 23 --yes \
   --private-link --subnet-ids ${join(",", module.rosa-privatelink-vpc.rosa_subnet_ids)} \
-  ${local.multi_az}
+  ${local.multi_az} \
+  --http-proxy http://${aws_instance.egress_proxy.private_ip}:3128 \
+  --https-proxy http://${aws_instance.egress_proxy.private_ip}:3128 \
+  --additional-trust-bundle-file ./files/squid-ca-cert.pem
 
 * create a route53 zone association for the egress vpc
 $ ZONE=$(aws route53 list-hosted-zones-by-vpc --vpc-id ${module.rosa-privatelink-vpc.rosa_vpc_id} \
