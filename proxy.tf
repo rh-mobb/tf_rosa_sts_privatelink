@@ -29,6 +29,8 @@ resource "aws_instance" "egress_proxy" {
         network_interface_id = "${aws_network_interface.egress_proxy_interface.id}"
         device_index = 0
     }
+# Security groups to use!
+   vpc_security_group_ids = [aws_security_group.egress-proxy_sg.id]
 
     tags = {
         Name = "${local.name}_egress_proxy"
@@ -36,7 +38,7 @@ resource "aws_instance" "egress_proxy" {
 }
 
 # create security group for egress proxy
-resource "aws_security_group" "egress-proxy" {
+resource "aws_security_group" "egress-proxy_sg" {
 
   description = "egress proxy"
   name = "${local.name}-egress-proxy"
