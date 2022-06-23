@@ -3,13 +3,13 @@
 # }
 # create a Random string
 resource "random_string" "cluster_random_suffix" {
-  length = 3
+  length = 2
   upper = false
   special = false
 }
 
 locals {
-  name = "rosa-${var.cluster_name}-${random_string.cluster_random_suffix.id}"
+  name = "${var.cluster_name}-${random_string.cluster_random_suffix.id}"
 }
 
 
