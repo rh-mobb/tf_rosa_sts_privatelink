@@ -22,17 +22,14 @@ resource "aws_instance" "egress_proxy" {
     ami =  var.bastion_ami
     instance_type = var.bastion_instance_type
     key_name = aws_key_pair.egress-proxy-key-pair.key_name
-
     user_data = "${file("egress_proxy_user_data.sh")}"
-
     network_interface {
         network_interface_id = "${aws_network_interface.egress_proxy_interface.id}"
         device_index = 0
     }
 # Security groups to use! 
-# if you define the network_interface block then 
-# you're overriding the default ENI and so can't
-#  specify security groups at the instance level
+# if you define the network_interface block then  you're overriding the default ENI and so can't
+# specify security groups at the instance level
 #   vpc_security_group_ids = [aws_security_group.egress-proxy_sg.id]
 
     tags = {
