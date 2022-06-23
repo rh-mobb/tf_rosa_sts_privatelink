@@ -70,7 +70,7 @@ Using the code in the repo will require having the following tools installed:
 
 1. Create a route53 zone association for the egress VPC
 
-   OPTION 1(CLI):
+   Option 1: using CLI
    ```
    ZONE=$(aws route53 list-hosted-zones-by-vpc --vpc-id vpc-04fd66db807b5a2af \
     --vpc-region us-east-2 \
@@ -82,7 +82,7 @@ Using the code in the repo will require having the following tools installed:
       --output text
     ```
 
-    OPTION 2(GUI):
+    Option 2: using GUI
 
      find your cluster hosted zone($YOUR_OPENSHIFT_DNS) and associate egress VPC ($YOUR_CLUSTER_NAME.egress_vpc.<random string>) to it
     ```
