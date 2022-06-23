@@ -87,7 +87,7 @@ Using the code in the repo will require having the following tools installed:
      find your cluster hosted zone($YOUR_OPENSHIFT_DNS) and associate egress VPC ($YOUR_CLUSTER_NAME.egress_vpc.<random string>) to it
     ```
     To associate additional VPCs with a private hosted zone using the Route 53 console:
-    
+
     Sign in to the AWS Management Console and open the Route 53 console at https://console.aws.amazon.com/route53/.
     In the navigation pane, choose ROSA cluster Hosted zones.
     Choose the radio button for the private hosted zone that you want to associate more VPCs with.
@@ -109,6 +109,8 @@ You can use sshuttle or ssh tunneling to connect to your cluster
     ```bash
     oc login https://api.$YOUR_OPENSHIFT_DNS:6443 --username cluster-admin --password xxxxxxxxxx
     ```
+1. Check that you can access the Console by opening the console url in your browser.
+    
 ### using SSH tunneling
 1. update /etc/hosts to point the openshift domains to localhost. Use the DNS of your openshift cluster as described in the previous step in place of `$YOUR_OPENSHIFT_DNS` below
 
