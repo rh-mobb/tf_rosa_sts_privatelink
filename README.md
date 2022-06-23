@@ -7,12 +7,11 @@ To deploy Red Hat OpenShift Service on AWS (ROSA) into your existing Amazon Web 
 
 NOTE: STS(secure token service) allows us to deploy ROSA without needing a ROSA admin account, instead it uses roles and policies with Amazon STS to gain access to the AWS resources needed to install and operate the cluster.
 
-In this series, we use Terraform to provision all resources in AWS to deploy a ROSA cluster with Privatelink and STS.
+In this series, we use Terraform to provision all resources in AWS to deploy a ROSA cluster with Privatelink and STS.  
 
 ## Create the AWS Virtual Private Cloud (VPCs), Pub/Private Subnets and TGW
 
-This terraform script provisions 2 VPCs and 3 subnets and 1 bastion host as follows.
-
+This terraform script provisions 2 VPCs(VPC for ROSA cluster and egress VPC), 3 subnets, a bastion, IGW, NGW and a forward proxy to control cluster's egress traffic. 
 
 
 
@@ -44,9 +43,14 @@ Using the code in the repo will require having the following tools installed:
    > The command provided in the Terraform output will create a private-link cluster in the private subnet.  It should look something like this:
 
     ```bash
-    rosa create cluster --cluster-name mhs-tf-rosa --mode auto -y --sts \
-    --machine-cidr 10.1.0.0/16 --service-cidr 172.30.0.0/16 --pod-cidr 10.128.0.0/14 --host-prefix 23 \
-    --private-link --subnet-ids <subnet ID from Terraform output>
+    rosa create cluster --cluster-name mhs-8v --mode auto --sts \
+    --machine-cidr 10.201.0.0/16 --service-cidr 172.30.0.0/16 \
+    --pod-cidr 10.128.0.0/14 --host-prefix 23 --yes \
+    --private-link --subnet-ids subnet-03632b7e0e59f5773,subnet-0e6879794df1ba7cd,subnet-01b8e7c51e780c411 \
+    --multi-az \
+    --http-proxy http://10.200.2.38:3128 \
+    --https-proxy http://10.200.2.38:3128 \
+    --additional-trust-bundle-file ./files/squid-ca-cert.pem
     ```
 
 ## Test Connectivity
@@ -64,14 +68,19 @@ Using the code in the repo will require having the following tools installed:
    rosa describe cluster -c $ROSA_CLUSTER_NAME
    ```
 
-1. update /etc/hosts to point the openshift domains to localhost. Use the DNS of your openshift cluster as described in the previous step in place of `$YOUR_OPENSHIFT_DNS` below
+1. Create a route53 zone association for the egress VPC
+   ```
+   ZONE=$(aws route53 list-hosted-zones-by-vpc --vpc-id vpc-04fd66db807b5a2af \
+    --vpc-region us-east-2 \
+    --query 'HostedZoneSummaries[*].HostedZoneId' --output text)
 
+   aws route53 associate-vpc-with-hosted-zone \
+      --hosted-zone-id $ZONE \
+      --vpc VPCId=vpc-0ce55194f8d0a6472,VPCRegion=us-east-2 \
+      --output text
     ```
-    127.0.0.1 api.$YOUR_OPENSHIFT_DNS
-    127.0.0.1 console-openshift-console.apps.$YOUR_OPENSHIFT_DNS
-    127.0.0.1 oauth-openshift.apps.$YOUR_OPENSHIFT_DNS
-    ```
-1. find your cluster hosted zone($YOUR_OPENSHIFT_DNS) and associate egress VPC ($YOUR_CLUSTER_NAME.egress_vpc.<random string>) to it
+
+    1. find your cluster hosted zone($YOUR_OPENSHIFT_DNS) and associate egress VPC ($YOUR_CLUSTER_NAME.egress_vpc.<random string>) to it
     ```
     To associate additional VPCs with a private hosted zone using the Route 53 console
     Sign in to the AWS Management Console and open the Route 53 console at https://console.aws.amazon.com/route53/.
@@ -82,6 +91,28 @@ Using the code in the repo will require having the following tools installed:
     Choose the Region and the ID of the VPC that you want to associate with this hosted zone.
     To associate more VPCs with this hosted zone, repeat steps 5 and 6.
     Choose Save changes.
+
+You can use sshuttle or ssh tunneling to connect to your cluster
+### using sshuttle
+1. Create a sshuttle VPN via your bastion:
+   ```
+   sshuttle --dns -NHr ec2-user@18.119.138.69 10.128.0.0/9
+   ```
+
+1. Log into the cluster using oc login command from the create admin command above. ex.
+
+    ```bash
+    oc login https://api.$YOUR_OPENSHIFT_DNS:6443 --username cluster-admin --password xxxxxxxxxx
+    ```
+### using SSH tunneling
+1. update /etc/hosts to point the openshift domains to localhost. Use the DNS of your openshift cluster as described in the previous step in place of `$YOUR_OPENSHIFT_DNS` below
+
+    ```
+    127.0.0.1 api.$YOUR_OPENSHIFT_DNS
+    127.0.0.1 console-openshift-console.apps.$YOUR_OPENSHIFT_DNS
+    127.0.0.1 oauth-openshift.apps.$YOUR_OPENSHIFT_DNS
+    ```
+
 
 
 1. Use public IP address from Terraform output to connect to bastion host. SSH to that instance, tunneling traffic for the appropriate hostnames. Be sure to use your new/existing private key, the OpenShift DNS for `$YOUR_OPENSHIFT_DNS` and your jump host IP for `$YOUR_EC2_IP`
@@ -119,6 +150,8 @@ Using the code in the repo will require having the following tools installed:
 
     ```bash
     rosa delete cluster -c $ROSA_CLUSTER_NAME -y
+    rosa delete operator-roles -c <cluster id>
+	rosa delete oidc-provider -c <cluster id>
     ```
 
 1. Delete AWS resources
