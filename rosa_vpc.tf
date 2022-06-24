@@ -3,7 +3,7 @@
 module "rosa-privatelink-vpc" {
   source  = "rh-mobb/rosa-privatelink-vpc/aws"
   version = "0.0.2"
-  name = "${local.name}-rosa"
+  name = "${local.name}"
   region = var.region
   azs  = var.availability_zones
   cidr = var.rosa_vpc_cidr_block

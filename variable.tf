@@ -1,6 +1,6 @@
 variable "cluster_name" {
   type        = string
-  default     = "rosa_prvlnk_sts"
+  default     = "mhs"
   description = "ROSA cluster name"
 }
 
@@ -32,6 +32,18 @@ variable "bastion_instance_type" {
   type        = string
   default     = "t2.micro"
   description = "Bastion instance type"
+}
+
+variable "proxy_ami" {
+  type        = string
+  default     = "ami-0ba62214afa52bec7"
+  description = "Proxy AMI"
+}
+
+variable "proxy_instance_type" {
+  type        = string
+  default     = "m4.large"
+  description = "Proxy instance type"
 }
 
 variable "rosa_vpc_cidr_block" {
@@ -73,5 +85,5 @@ variable "tgw_cidr_block" {
 variable "enable_rosa_jumphost" {
   description = "If set to true, deploy a jumphost in the ROSA private subnet"
   type        = bool
-  default     = false
+  default     = true
 }
