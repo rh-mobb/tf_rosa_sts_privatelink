@@ -87,3 +87,38 @@ variable "enable_rosa_jumphost" {
   type        = bool
   default     = true
 }
+
+
+
+
+#####################
+# OIDC VARRIABLES
+####################
+
+
+variable "base_url" {
+  description = "The Okta base URL. Example: okta.com, oktapreview.com, etc. This is the domain part of your Okta org URL"
+  default = "okta.com"
+}
+variable "org_name" {
+  description = "The Okta org name. This is the part before the domain in your Okta org URL"
+  default = "dev-40766750"
+}
+
+variable "api_token" {
+  type        = string
+  description = "The Okta API token, this will be read from environment variable (TF_VAR_api_token) for security"
+  sensitive   = true
+#  default = "00zg_t_1BbxE71A-Wah1eWknyAqT6KoNF521MpNsOm"
+}
+
+# Enable and configure the Okta provider
+terraform {
+  required_providers {
+    okta = {
+      source  = "okta/okta"
+      version = "~> 3.15"
+    }
+  }
+}
+
