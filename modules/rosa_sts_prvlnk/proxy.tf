@@ -1,5 +1,5 @@
 data "template_file" "init" {
-  template = "${file("templates/egress_proxy_user_data.sh")}"
+  template = "${file("${path.module}/templates/egress_proxy_user_data.sh")}"
   vars = {
     region = "${var.region}"
   }

@@ -9,7 +9,7 @@ resource "random_string" "cluster_random_suffix" {
 }
 
 locals {
-  name = "${var.cluster_name}-${random_string.cluster_random_suffix.id}"
+  name = "${var.cluster_name}"
 }
 
 
@@ -21,6 +21,34 @@ locals {
 
 locals {
   multi_az = length(module.rosa-privatelink-vpc.rosa_subnet_ids) > 1 ? "--multi-az" : ""
+}
+output "cluster_name" {
+  value = "${local.name}"
+} 
+
+
+output "install_cluster" {
+    value = join("", ["rosa create cluster --cluster-name ${local.name} --mode auto --sts",
+                      " --machine-cidr ${module.rosa-privatelink-vpc.rosa_vpc_cidr} --service-cidr 172.30.0.0/16 ",
+                      " --pod-cidr 10.128.0.0/14 --host-prefix 23 --yes ", 
+                      " --private-link --subnet-ids ${join(",", module.rosa-privatelink-vpc.rosa_subnet_ids)} ",
+                      " ${local.multi_az} ",
+                      " --http-proxy http://${aws_instance.egress_proxy.private_ip}:3128 ",
+                      " --https-proxy http://${aws_instance.egress_proxy.private_ip}:3128 ",
+                      " --additional-trust-bundle-file ${path.module}/files/squid-ca-cert.pem" ])
+}
+
+output "zone" {
+  value = join("", ["aws route53 list-hosted-zones-by-vpc --vpc-id ${module.rosa-privatelink-vpc.rosa_vpc_id}", 
+                    " --vpc-region ${var.region}",
+                    " --query 'HostedZoneSummaries[*].HostedZoneId' --output text"])
+}
+
+output "associate_route53_zone" {
+  value= join("", ["aws route53 associate-vpc-with-hosted-zone",
+                   " --hosted-zone-id $ZONE",
+                   " --vpc VPCId=${aws_vpc.egress_vpc.id},VPCRegion=${var.region}",
+                   " --output text"])
 }
 
 output "next_steps" {

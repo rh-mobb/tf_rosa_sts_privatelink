@@ -24,7 +24,7 @@ resource "okta_group" "ocp_restricted_users" {
 data "okta_user" "admin" {
   search {
     name  = "profile.email"
-    value = "msarvest@redhat.com"
+    value = "${var.okta_admin_email}"
   }
 }
 
@@ -62,10 +62,10 @@ resource "okta_app_oauth" "ocp_oidc" {
   ]
   response_types = ["code"]
   redirect_uris = [
-    "https://oauth-openshift.apps.mhs-2z.ver6.p1.openshiftapps.com/oauth2callback/okta",
+    var.redirect_uris,
   ]
   post_logout_redirect_uris = [
-    "http://localhost:8000",
+    var.post_logout_redirect_uris,
   ]
   lifecycle {
     ignore_changes = [groups]
@@ -106,6 +106,14 @@ output "ocp_oidc_issuer_url" {
   value = okta_auth_server.oidc_auth_server.issuer
 }
 
+
+output client_id {
+   value = okta_auth_server.oidc.client_id
+}
+
+output client_secret {
+   value = okta_auth_server.oidc.client_secret
+}
 
 
 

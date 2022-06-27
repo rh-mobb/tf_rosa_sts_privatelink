@@ -6,9 +6,10 @@ sudo dnf install -y wget curl python36 python36-devel net-tools gcc libffi-devel
 mkdir -p /etc/squid/certs
 
 cat << EOF | sudo tee /etc/squid/certs/squid-ca-cert-key.pem
-${file("./files/squid-ca-cert.pem") }
-${file("./files/squid-ca-key.pem") }
+${file("../modules/rosa_sts_prvlnk/files/squid-ca-cert.pem")}
+${file("../modules/rosa_sts_prvlnk/files/squid-ca-key.pem")}
 EOF
+
 
 cat << EOF | sudo tee /etc/squid/allow-list.txt
 # https://docs.openshift.com/rosa/rosa_install_access_delete_clusters/rosa_getting_started_iam/rosa-aws-prereqs.html#osd-aws-privatelink-firewall-prerequisites
