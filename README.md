@@ -37,10 +37,10 @@ Using the code in the repo will require having the following tools installed:
     Name your token and click Create Token.
     Record the token value.
 
-update terraform variables in [oidc modules](./oidc/oidc.tf)
+update terraform variables in [oidc](./oidc/oidc.tf)
 ## Deploy cluster
 
-update variable in [rosa_sts_prvlnk module](./rosa/rosa.tf)
+update variable in [rosa_sts_prvlnk](./rosa/rosa_sts_prvlnk.tf)
 
    ```
    install.sh
