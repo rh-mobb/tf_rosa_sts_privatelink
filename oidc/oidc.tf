@@ -3,6 +3,9 @@ module "oidc" {
    api_token =  "00zg_t_1BbxE71A-Wah1eWknyAqT6KoNF521MpNsOm" 
    redirect_uris = var.redirect_uris
    post_logout_redirect_uris = var.post_logout_redirect_uris
+   org_name = "dev-40766750"
+   base_url = "okta.com"
+   okta_admin_email = "msarvest@redhat.com"
 }
 
 variable "redirect_uris" {
