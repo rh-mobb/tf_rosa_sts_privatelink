@@ -20,6 +20,13 @@ variable "api_token" {
 #  default = "00zg_t_1BbxE71A-Wah1eWknyAqT6KoNF521MpNsOm"
 }
 
+variable "oauth_app_name" {
+  type = string
+  description = "callback uri"
+  default = "OCP_OKTA"
+  
+}
+
 variable "redirect_uris" {
   type = string
   description = "callback uri"
