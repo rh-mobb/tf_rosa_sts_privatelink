@@ -6,6 +6,7 @@ module "oidc" {
    org_name = "dev-40766750"
    base_url = "okta.com"
    okta_admin_email = "msarvest@redhat.com"
+   oauth_app_name = "OCP_OKTA"  # check for duplication in OKTA account
 }
 
 variable "redirect_uris" {
