@@ -37,10 +37,10 @@ Using the code in the repo will require having the following tools installed:
     Name your token and click Create Token.
     Record the token value.
 
-update terraform variables in [oidc modules](tf_rosa_sts_privatelink/oidc/oidc.tf)
+update terraform variables in [oidc modules](./tf_rosa_sts_privatelink/oidc/oidc.tf)
 ## Deploy cluster
 
-update variable in [rosa_sts_prvlnk module](tf_rosa_sts_privatelink/README.md)
+update variable in [rosa_sts_prvlnk module](./tf_rosa_sts_privatelink/README.md)
 
    ```
    install.sh
@@ -48,9 +48,9 @@ update variable in [rosa_sts_prvlnk module](tf_rosa_sts_privatelink/README.md)
 
  
  Check that you can access the Console by opening the console url in your browser.
-   ‍‍```
+   ‍```
    rosa describe cluster -c <clustername>
-
+   ```
 
 ## Cleanup
 
