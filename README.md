@@ -40,7 +40,7 @@ Using the code in the repo will require having the following tools installed:
 update terraform variables in [oidc modules](./oidc/oidc.tf)
 ## Deploy cluster
 
-update variable in [rosa_sts_prvlnk module](./rosa_sts_prvlnk/rosa_sts_prvlnk.tf)
+update variable in [rosa_sts_prvlnk module](./rosa/rosa.tf)
 
    ```
    install.sh
