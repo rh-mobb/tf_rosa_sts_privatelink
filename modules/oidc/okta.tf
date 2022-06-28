@@ -53,7 +53,7 @@ resource "okta_group_memberships" "restricted_user" {
 # Create an OIDC application
 
 resource "okta_app_oauth" "ocp_okta" {
-  label                      = "OCP OIDC"
+  label                      = var.oauth_app_name
   type                       = "web" # this is important
 #  token_endpoint_auth_method = "none"   # this sets the client authentication to PKCE
   consent_method = "REQUIRED"
