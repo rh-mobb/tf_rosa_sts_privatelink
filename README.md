@@ -47,12 +47,14 @@ update variable in [rosa_sts_prvlnk module](tf_rosa_sts_privatelink/README.md)
    ```
 
  
-1. Check that you can access the Console by opening the console url in your browser.
+ Check that you can access the Console by opening the console url in your browser.
+   ‍‍```
+   rosa describe cluster -c <clustername>
 
 
 ## Cleanup
 
-1. Delete cluster and OKTA configuration
+  Delete cluster and OKTA configuration
 
     ```
     uninstall.sh
