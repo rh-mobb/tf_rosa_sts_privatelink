@@ -23,13 +23,14 @@ variable "api_token" {
 variable "redirect_uris" {
   type = string
   description = "callback uri"
-  default = "https://oauth-openshift.apps.mhs-2z.6mza.p1.openshiftapps.com/oauth2callback/okta"
+  default = ""
+  
 }
 
 variable "post_logout_redirect_uris" {
   type = string
   description = "callback uri"
-  default = "https://oauth-openshift.apps.mhs-2z.6mza.p1.openshiftapps.com/oauth2callback/okta"
+  default = ""
 }
 
 variable "okta_admin_email" {

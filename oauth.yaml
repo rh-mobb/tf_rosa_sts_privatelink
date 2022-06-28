@@ -1,0 +1,23 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: htpasswd-secret
+    mappingMethod: claim
+    name: htpasswd-1
+    type: HTPasswd
+  templates:
+    error:
+      name: rosa-oauth-templates-errors
+    login:
+      name: rosa-oauth-templates-login
+    providerSelection:
+      name: rosa-oauth-templates-providers
+  tokenConfig:
+    accessTokenMaxAgeSeconds: 0
+
+

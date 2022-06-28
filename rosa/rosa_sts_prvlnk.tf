@@ -19,3 +19,11 @@ output "zone" {
 output "associate_route53_zone" {
    value = module.rosa.associate_route53_zone
 }
+
+output "bastion_public_ip" {
+   value = module.rosa.bastion_public_ip
+}
+
+output "tgw_cidr" {
+   value = module.rosa.tgw_cidr
+} 

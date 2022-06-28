@@ -52,7 +52,7 @@ resource "okta_group_memberships" "restricted_user" {
 
 # Create an OIDC application
 
-resource "okta_app_oauth" "ocp_oidc" {
+resource "okta_app_oauth" "ocp_okta" {
   label                      = "OCP OIDC"
   type                       = "web" # this is important
 #  token_endpoint_auth_method = "none"   # this sets the client authentication to PKCE
@@ -62,10 +62,10 @@ resource "okta_app_oauth" "ocp_oidc" {
   ]
   response_types = ["code"]
   redirect_uris = [
-    var.redirect_uris,
+    var.redirect_uris
   ]
   post_logout_redirect_uris = [
-    var.post_logout_redirect_uris,
+    var.post_logout_redirect_uris
   ]
   lifecycle {
     ignore_changes = [groups]
@@ -73,8 +73,8 @@ resource "okta_app_oauth" "ocp_oidc" {
 }
 
 # Assign groups to the OIDC application
-resource "okta_app_group_assignments" "ocp_oidc_group" {
-  app_id = okta_app_oauth.ocp_oidc.id
+resource "okta_app_group_assignments" "ocp_okta_group" {
+  app_id = okta_app_oauth.ocp_okta.id
   group {
     id = okta_group.ocp_admin.id
   }
@@ -83,12 +83,12 @@ resource "okta_app_group_assignments" "ocp_oidc_group" {
   }
 }
 
-output "ocp_oidc_client_id" {
-  value = okta_app_oauth.ocp_oidc.client_id
+output "ocp_okta_client_id" {
+  value = okta_app_oauth.ocp_okta.client_id
 }
 
-output "ocp_oidc_client_secret" {
-  value = okta_app_oauth.ocp_oidc.client_secret
+output "ocp_okta_client_secret" {
+  value = okta_app_oauth.ocp_okta.client_secret
   sensitive = true
 }
 
@@ -102,17 +102,18 @@ resource "okta_auth_server" "oidc_auth_server" {
   audiences = ["http:://localhost:8000"]
 }
 
-output "ocp_oidc_issuer_url" {
+output "ocp_okta_issuer_url" {
   value = okta_auth_server.oidc_auth_server.issuer
 }
 
 
 output client_id {
-   value = okta_auth_server.oidc.client_id
+   value = okta_app_oauth.ocp_okta.client_id
 }
 
 output client_secret {
-   value = okta_auth_server.oidc.client_secret
+   value = okta_app_oauth.ocp_okta.client_secret
+   sensitive = true
 }
 
 
@@ -142,7 +143,7 @@ resource "okta_auth_server_policy" "auth_policy" {
   auth_server_id   = okta_auth_server.oidc_auth_server.id
   description      = "Policy for allowed clients"
   priority         = 1
-  client_whitelist = [okta_app_oauth.ocp_oidc.id]
+  client_whitelist = [okta_app_oauth.ocp_okta.id]
 }
 
 resource "okta_auth_server_policy_rule" "auth_policy_rule" {

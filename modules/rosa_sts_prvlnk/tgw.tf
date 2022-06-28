@@ -10,6 +10,10 @@ resource "aws_ec2_transit_gateway" "rosa_transit_gateway" {
   }
 }
 
+output "tgw_cidr" {
+   value= var.tgw_cidr_block
+}
+
 # # attach tgw to vpc (it is mandatory before you update subnet route table)
 # resource "aws_ec2_transit_gateway_vpc_attachment" "tgw_attach_rosa_vpc" {
 #   subnet_ids         = [aws_subnet.rosa_prv_subnet.id]

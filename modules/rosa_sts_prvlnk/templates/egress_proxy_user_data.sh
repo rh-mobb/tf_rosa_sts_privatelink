@@ -55,6 +55,8 @@ nosnch.in
 *.osdsecuritylogs.splunkcloud.com
 http-inputs-osdsecuritylogs.splunkcloud.com
 sftp.access.redhat.com
+#okta
+*.okta.com
 EOF
 
 cat << EOF | sudo tee /etc/squid/squid.conf
