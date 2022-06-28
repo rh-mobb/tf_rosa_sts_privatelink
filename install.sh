@@ -22,7 +22,7 @@ while [ $(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')  != "read
    sleep 30
    end_time="$(date -u +%s)"
    elapsed="$(($end_time-$start_time))"
-   echo "Total of $(expr $elapsed / 60) min elapsed  "
+#   echo "Total of $(expr $elapsed / 60) min elapsed  "
    echo "Approximate time remaining $(expr 40 - $(expr $elapsed / 60))"
 done 
 
