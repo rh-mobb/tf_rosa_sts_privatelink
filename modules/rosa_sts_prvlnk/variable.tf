@@ -1,6 +1,6 @@
 variable "cluster_name" {
   type        = string
-  default     = "rosa-tf-oidc"
+  default     = "rosa-tf-idp"
   description = "ROSA cluster name"
 }
 
