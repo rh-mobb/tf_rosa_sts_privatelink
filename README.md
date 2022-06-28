@@ -1,6 +1,6 @@
 # Using Terraform to build ROSA cluster with Private Link enabled and STS
 
-Red Hat Openshift Service on AWS (ROSA) is a fully-managed turnkey application platform. A ROSA cluster can be created without any requirements on public subnets, internet gateways, or network address translation (NAT) gateways. In this configuration, Red Hat uses AWS PrivateLink to manage and monitor a cluster in order to avoid all public ingress network traffic.
+Red Hat Openshift Service on AWS (ROSA) is a fully-managed turnkey application platform. A ROSA cluster can be created without any requirements on public subnets, internet gateways, or network address translation (NAT) gateways. In this configuration, Red Hat uses AWS PrivateLink to manage and monitor a cluster to avoid all public ingress network traffic.
 
 To deploy Red Hat OpenShift Service on AWS (ROSA) into your existing Amazon Web Services (AWS) account, Red Hat requires several prerequisites to be met. There are several [requirements ](https://docs.openshift.com/rosa/rosa_planning/rosa-sts-aws-prereqs.html#rosa-sts-aws-prereqs), [Review AWS service quota](https://docs.openshift.com/rosa/rosa_planning/rosa-sts-required-aws-service-quotas.html#rosa-sts-required-aws-service-quotasr) and [enable ROSA in your AWS account Access](https://docs.openshift.com/rosa/rosa_planning/rosa-sts-setting-up-environment.html#rosa-sts-setting-up-environment).
 
@@ -11,7 +11,7 @@ In this series, we use Terraform to provision all resources in AWS to deploy a R
 
 ## Create the AWS Virtual Private Cloud (VPCs), Pub/Private Subnets and TGW
 
-This install.sh script provisions 2 VPCs(VPC for ROSA cluster and egress VPC), 3 subnets, a bastion, IGW, NGW and a forward proxy to control cluster's egress traffic. Meanawhile, the script configures OKTA account by creating  an application, authorization server, groups, and all nerccesary component for OIDC configuration in OpenShift 
+This install.sh script provisions 2 VPCs(VPC for ROSA cluster and egress VPC), 3 subnets, a bastion, IGW, NGW and a forward proxy to control cluster's egress traffic. Meanwhile, the script configures OKTA account by creating  an application, authorization server, groups, and all nerccesary component for OIDC configuration in OpenShift 
 
 
 
@@ -46,11 +46,10 @@ update variable in [rosa_sts_prvlnk module](./tf_rosa_sts_privatelink/README.md)
    install.sh
    ```
 
- 
  Check that you can access the Console by opening the console url in your browser.
-   ‍```
+   ‍
    rosa describe cluster -c <clustername>
-   ```
+   
 
 ## Cleanup
 
