@@ -9,7 +9,7 @@ echo "cluster name is $CLUSTER_NAME"
 rosa delete cluster -c $CLUSTER_NAME -y
 
 
-while [ $(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')  != "" ]  
+while [ "$(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')"  != "" ]  
  do  
    echo "cluster status is $(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')"
    echo "cluster is not deleted" 
