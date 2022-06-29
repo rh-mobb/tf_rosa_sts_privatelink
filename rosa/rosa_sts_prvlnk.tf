@@ -1,6 +1,6 @@
 module "rosa" {
    source = "../modules/rosa_sts_prvlnk/"
-   cluster_name = "rosa-tp-idp"
+   cluster_name = "rosa-tf-idp"
    enable_rosa_jumphost = false
 
 }
