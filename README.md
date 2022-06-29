@@ -27,7 +27,7 @@ Using the code in the repo will require having the following tools installed:
 - The OC CLI
 
 ## Create OKTA account
-[Create a OKTA developer account](https://developer.okta.com/signup/)
+[Create an OKTA developer account](https://developer.okta.com/signup/)
 
 [Create the API token](https://developer.okta.com/docs/guides/create-an-api-token/main/)
 
@@ -37,7 +37,7 @@ Using the code in the repo will require having the following tools installed:
     Name your token and click Create Token.
     Record the token value.
 
-update terraform variables in [oidc](./oidc/oidc.tf)
+update terraform variables in [oidc](./oidc/oidc.tf). be sure to update at least api_token, org_name, base_url and okta_admin_email
 ## Deploy cluster
 
 update terraform variable in [rosa](./rosa/rosa_sts_prvlnk.tf)
