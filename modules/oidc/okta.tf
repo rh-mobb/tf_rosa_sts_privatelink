@@ -8,9 +8,14 @@ provider "okta" {
 
 
 # Set up OKTA groups
-resource "okta_group" "ocp_admin" {
-  name        = "ocp-admins"
+resource "okta_group" "ocp_cluster_admin" {
+  name        = "ocp-cluster-admins"
   description = "Users who can access openshift cluster as admins"
+}
+
+resource "okta_group" "ocp_dedicated_admin" {
+  name        = "ocp-dedicated-admins"
+  description = "Grants standard administrative privileges for OpenShift Dedicated. Users can perform administrative actions listed in the documentation"
 }
 
 resource "okta_group" "ocp_restricted_users" {
@@ -21,17 +26,40 @@ resource "okta_group" "ocp_restricted_users" {
 
 
 # Assign users to the groups
-data "okta_user" "admin" {
+data "okta_user" "cluster_admin" {
   search {
     name  = "profile.email"
-    value = "${var.okta_admin_email}"
+    value = "${var.cluster_admin_email}"
   }
 }
 
-resource "okta_group_memberships" "admin_user" {
-  group_id = okta_group.ocp_admin.id
+resource "okta_group_memberships" "clsuter-admin" {
+  group_id = okta_group.ocp_cluster_admin.id
   users = [
-    data.okta_user.admin.id
+    data.okta_user.cluster_admin.id
+  ]
+}
+
+output cluster_admin_email {
+   value = "${var.cluster_admin_email}"
+}
+
+
+data "okta_user" "dedicated_admin" {
+  search {
+    name  = "profile.email"
+    value = "${var.dedicated_admin_email}"
+  }
+}
+output dedicated_admin_email {
+   value = "${var.dedicated_admin_email}"
+}
+
+
+resource "okta_group_memberships" "dedicated-admin" {
+  group_id = okta_group.ocp_dedicated_admin.id
+  users = [
+    data.okta_user.dedicated_admin.id
   ]
 }
 
@@ -41,6 +69,10 @@ data "okta_user" "restricted_user" {
     value = "${var.restricted_user_email}"
   }
 }
+output restricted_user_email {
+   value = "${var.restricted_user_email}"
+}
+
 
 resource "okta_group_memberships" "restricted_user" {
   group_id = okta_group.ocp_restricted_users.id
@@ -76,7 +108,7 @@ resource "okta_app_oauth" "ocp_okta" {
 resource "okta_app_group_assignments" "ocp_okta_group" {
   app_id = okta_app_oauth.ocp_okta.id
   group {
-    id = okta_group.ocp_admin.id
+    id = okta_group.ocp_cluster_admin.id
   }
   group {
     id = okta_group.ocp_restricted_users.id
