@@ -46,6 +46,18 @@ variable "okta_admin_email" {
   default = "msarvest@redhat.com"
 }
 
+variable "cluster_admin_email" {
+  type = string
+  description = "ocp cluster admin email"
+  default = "msarvest@redhat.com"
+}
+
+variable "dedicated_admin_email" {
+  type = string
+  description = "okta  dedicated admin email"
+  default = "mohsen@redhat.com"
+}
+
 variable "restricted_user_email" {
   type = string
   description = "okta restricted user email"
