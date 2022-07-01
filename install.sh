@@ -55,12 +55,12 @@ CLIENT_SECRET=$(terraform  output --raw client_secret)
 ISSUER=$(terraform output --raw  issuer)
 
 rosa create idp --cluster $CLUSTER_NAME --client-id $CLIENT_ID --client-secret $CLIENT_SECRET \
-     --email-claims email --name-claims name --username-claims preferred_username \
-     --issuer-url $ISSUER --type openid --name okta
+     --email-claims email --name-claims name --username-claims preferred_username,email \
+     --issuer-url $ISSUER --type openid --name okta --extra-scopes email,profile
 
 
 
-echo "waiting for oauth to be up and running  "
+echo "waiting for oauth to be up and running approximatley 2 min  "
 sleep 60
 
 
