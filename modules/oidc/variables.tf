@@ -46,6 +46,11 @@ variable "okta_admin_email" {
   default = "msarvest@redhat.com"
 }
 
+variable "restricted_user_email" {
+  type = string
+  description = "okta restricted user email"
+  default = "houshym@gmail.com"
+}
 # Enable and configure the Okta provider
 terraform {
   required_providers {
