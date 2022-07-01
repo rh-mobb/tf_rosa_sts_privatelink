@@ -6,7 +6,10 @@ module "oidc" {
    org_name = "dev-40766750"
    base_url = "okta.com"
    okta_admin_email = "msarvest@redhat.com"
-   oauth_app_name = "OCP_OKTA"  # check for duplication in OKTA account
+   cluster_admin_email = "msarvest@redhat.com"
+   dedicated_admin_email = "mohsen@redhat.com"
+   restricted_user_email = "houshym@gmail.com"
+   oauth_app_name = "OCP_OKTA1"  # check for duplication in OKTA account
 }
 
 variable "redirect_uris" {
@@ -18,6 +21,19 @@ variable "post_logout_redirect_uris" {
    default = ""
 }
 
+variable "cluster_admin_email" {
+   default = ""
+}
+
+variable "dedicated_admin_email" {
+   default = ""
+}
+
+variable "restricted_user_email" {
+   default = ""
+}
+
+
 output client_id {
    value = module.oidc.client_id
 }
@@ -28,6 +44,17 @@ output client_secret {
 }
 
 output issuer {
-   value= module.oidc.ocp_okta_issuer_url
+   value = module.oidc.ocp_okta_issuer_url
 }
 
+output ocp_cluster_admin_email {
+   value = module.oidc.cluster_admin_email 
+}
+
+output ocp_dedicated_admin_email {
+    value = module.oidc.dedicated_admin_email
+ }
+
+output ocp_restricted_user_email {
+    value = module.oidc.restricted_user_email
+ }
