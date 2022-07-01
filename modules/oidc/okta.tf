@@ -38,7 +38,7 @@ resource "okta_group_memberships" "admin_user" {
 data "okta_user" "restricted_user" {
   search {
     name  = "profile.email"
-    value = "houshym@gmail.com"
+    value = "${var.restricted_user_email}"
   }
 }
 
@@ -129,6 +129,14 @@ resource "okta_auth_server_claim" "auth_claim" {
   group_filter_type       = "STARTS_WITH"
   value                   = "ocp-"
   value_type              = "GROUPS"
+}
+
+resource "okta_auth_server_claim" "ocp_user" {
+  auth_server_id = okta_auth_server.oidc_auth_server.id
+  name           = "ocp_user"
+  value          = "user.firstName"
+#  scopes         = ["any"]
+  claim_type     = "RESOURCE"
 }
 
 
