@@ -63,7 +63,10 @@ rosa create idp --cluster $CLUSTER_NAME --client-id $CLIENT_ID --client-secret $
 echo "waiting for oauth to be up and running approximatley 2 min  "
 sleep 60
 
-
+CLUSTER_ADMIN_EMAIL=$(terraform output --raw ocp_cluster_admin_email )
+DEDICATED_ADMIN_EMAIL=$(terraform output --raw ocp_dedicated_admin_email)
+rosa grant user cluster-admin -u $CLUSTER_ADMIN_EMAIL -c $CLUSTER_NAME 
+rosa grant user dedicated-admin -u $DEDICATED_ADMIN_EMAIL -c $CLUSTER_NAME 
 
 
 sshuttle --dns -NHr ec2-user@$BASTION_IP $TGW_CIDR
