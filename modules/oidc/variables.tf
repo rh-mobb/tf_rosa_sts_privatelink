@@ -15,9 +15,10 @@ variable "org_name" {
 
 variable "api_token" {
   type        = string
+  default = ""
   description = "The Okta API token, this will be read from environment variable (TF_VAR_api_token) for security"
   sensitive   = true
-#  default = "00zg_t_1BbxE71A-Wah1eWknyAqT6KoNF521MpNsOm"
+
 }
 
 variable "oauth_app_name" {
