@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 cd rosa/
 terraform apply -auto-approve
 
-# extract cluster name
+# install cluster and fetch cluster's name
 eval " $(terraform output --raw install_cluster)"
 CLUSTER_NAME=$(terraform output --raw cluster_name)
 echo "cluster name is $CLUSTER_NAME"
@@ -14,17 +14,20 @@ BASTION_IP=$(terraform output --raw bastion_public_ip)
 TGW_CIDR=$(terraform output --raw tgw_cidr)
 start_time="$(date -u +%s)"
 # wait till cluster is ready
-while [ $(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')  != "ready" ]  
- do  
-   echo "cluster $CLUSTER_NAME is $(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')"
-   now=$(date +"%T")
-#   echo "Current time  $now"
-   sleep 30
-   end_time="$(date -u +%s)"
-   elapsed="$(($end_time-$start_time))"
-#   echo "Total of $(expr $elapsed / 60) min elapsed  "
-   echo "Approximate time remaining $(expr 40 - $(expr $elapsed / 60))"
-done 
+# while [ $(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')  != "ready" ]  
+#  do  
+#    echo "cluster $CLUSTER_NAME is $(rosa list cluster | grep $CLUSTER_NAME | awk '{ print $3 }')"
+#    now=$(date +"%T")
+# #   echo "Current time  $now"
+#    sleep 30
+#    end_time="$(date -u +%s)"
+#    elapsed="$(($end_time-$start_time))"
+# #   echo "Total of $(expr $elapsed / 60) min elapsed  "
+#    echo "Approximate time remaining $(expr 40 - $(expr $elapsed / 60))"
+# done 
+echo "it takes approximatelly 40min "
+rosa logs install -c $CLUSTER_NAME --watch
+
 
 # associate hosted zone to egress VPC
 ZONE=$(eval " $(terraform output --raw zone)")
