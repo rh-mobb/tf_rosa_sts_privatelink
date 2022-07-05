@@ -1,6 +1,6 @@
 module "oidc" {
    source = "../modules/oidc/"
-   api_token =  "00zg_t_1BbxE71A-Wah1eWknyAqT6KoNF521MpNsOm" 
+   api_token =  "" 
    redirect_uris = var.redirect_uris
    post_logout_redirect_uris = var.post_logout_redirect_uris
    org_name = "dev-40766750"
@@ -10,6 +10,14 @@ module "oidc" {
    dedicated_admin_email = "mohsen@redhat.com"
    restricted_user_email = "houshym@gmail.com"
    oauth_app_name = "OCP_OKTA1"  # check for duplication in OKTA account
+}
+
+variable "api_token" {
+  type        = string
+  default = ""
+  description = "The Okta API token, this will be read from environment variable (TF_VAR_api_token) for security"
+  sensitive   = true
+
 }
 
 variable "redirect_uris" {
