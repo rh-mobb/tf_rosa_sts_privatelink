@@ -9,7 +9,7 @@
 # }
 
 locals {
-  name = "rosa-${var.cluster_name}"
+  name = "${var.cluster_name}"
 }
 
 
