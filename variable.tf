@@ -1,6 +1,6 @@
 variable "cluster_name" {
   type        = string
-  default     = "rosa_prvlnk_sts"
+  default     = "poc-acm-mhs-tmp"
   description = "ROSA cluster name"
 }
 
@@ -36,37 +36,37 @@ variable "bastion_instance_type" {
 
 variable "rosa_vpc_cidr_block" {
   type        = string
-  default     = "10.201.0.0/16"
+  default     = "10.64.0.0/16"
   description = "cidr range for rosa private vpc"
 }
 
 variable "rosa_subnet_cidr_blocks" {
   type        = list
-  default     = ["10.201.0.0/24", "10.201.1.0/24", "10.201.2.0/24"]
+  default     = ["10.64.0.0/24", "10.64.1.0/24", "10.64.2.0/24"]
   description = "cidr range for rosa private vpc"
 }
 
 variable "egress_vpc_cidr_block" {
   type        = string
-  default     = "10.200.0.0/16"
+  default     = "10.65.0.0/16"
   description = "cidr range for egress vpc"
 }
 
 variable "egress_prv_subnet_cidr_block" {
   type        = string
-  default     = "10.200.1.0/24"
+  default     = "10.65.1.0/24"
   description = "cidr range for private subnet in egress vpc"
 }
 
 variable "egress_pub_subnet_cidr_block" {
   type        = string
-  default     = "10.200.2.0/24"
+  default     = "10.65.2.0/24"
   description = "cidr range for pub subnet in egress vpc"
 }
 
 variable "tgw_cidr_block" {
   type        = string
-  default     = "10.128.0.0/9"
+  default     = "10.64.0.0/10"
   description = "cidr range that should be used for tgw"
 }
 
