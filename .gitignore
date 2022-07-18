@@ -4,6 +4,8 @@ terraform.tfstate.backup
 provider.tf.tmp
 graph.png
 
+
 .terraform.lock.hcl
 .terraform/
+.terraform.tfstate.lock.info
 rosa.plan
