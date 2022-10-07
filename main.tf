@@ -1,6 +1,7 @@
-# provider "aws" {
+provider "aws" {
 #   # Configuration options
-# }
+  region     = "us-west-2"
+}
 # create a Random string
 # resource "random_string" "cluster_random_suffix" {
 #   length = 6
