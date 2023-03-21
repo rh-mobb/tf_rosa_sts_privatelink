@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e -x
 
-sudo dnf install -y wget curl python36 python36-devel net-tools gcc libffi-devel openssl-devel jq bind-utils podman squid
+sudo dnf install -y wget curl python net-tools gcc libffi-devel openssl-devel jq bind-utils podman squid
 
 mkdir -p /etc/squid/certs
 
