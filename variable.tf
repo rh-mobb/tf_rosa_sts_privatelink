@@ -46,20 +46,10 @@ variable "bastion_key_loc" {
   description = "Public key for bastion host"
 }
 
-variable "bastion_ami" {
-  type        = string
-  description = "Bastion AMI"
-}
-
 variable "bastion_instance_type" {
   type        = string
   default     = "t2.micro"
   description = "Bastion instance type"
-}
-
-variable "proxy_ami" {
-  type        = string
-  description = "Proxy AMI"
 }
 
 variable "proxy_instance_type" {
