@@ -42,7 +42,7 @@ variable "proxy_ami" {
 
 variable "proxy_instance_type" {
   type        = string
-  default     = "m4.large"
+  default     = "t2.micro"
   description = "Proxy instance type"
 }
 
