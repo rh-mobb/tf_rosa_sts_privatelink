@@ -51,7 +51,7 @@ resource "aws_instance" "bastion" {
     aws_subnet.egress_vpc_prv_subnet,
     aws_security_group.bastion_sg,
   ]
-  ami = var.bastion_ami
+  ami = data.aws_ami.rhel9.id
   instance_type = var.bastion_instance_type
   subnet_id = aws_subnet.egress_vpc_pub_subnet.id
   key_name = aws_key_pair.bastion_key_pair.key_name

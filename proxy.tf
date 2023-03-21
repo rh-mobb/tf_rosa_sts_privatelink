@@ -15,7 +15,7 @@ resource "aws_key_pair" "egress-proxy-key-pair" {
 
 
 resource "aws_instance" "egress_proxy" {
-  ami =  var.proxy_ami
+  ami = data.aws_ami.rhel9.id
   instance_type = var.proxy_instance_type
   key_name = aws_key_pair.egress-proxy-key-pair.key_name
   user_data = data.template_file.init.rendered

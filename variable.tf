@@ -1,3 +1,27 @@
+data "aws_ami" "rhel9" {
+  executable_users = ["self"]
+  owners = ["309956199498"]
+  most_recent      = true
+
+  filter {
+    name   = "name"
+    values = ["RHEL-9*"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+}
+
 variable "cluster_name" {
   type        = string
   default     = "mhs"
@@ -24,7 +48,6 @@ variable "bastion_key_loc" {
 
 variable "bastion_ami" {
   type        = string
-  default     = "ami-0f4447ed9b385bedf"
   description = "Bastion AMI"
 }
 
@@ -36,7 +59,6 @@ variable "bastion_instance_type" {
 
 variable "proxy_ami" {
   type        = string
-  default     = "ami-0f4447ed9b385bedf"
   description = "Proxy AMI"
 }
 
