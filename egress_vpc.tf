@@ -12,7 +12,7 @@ resource "aws_vpc" "egress_vpc" {
 resource "aws_subnet" "egress_vpc_prv_subnet" {
   vpc_id     = aws_vpc.egress_vpc.id
   cidr_block = var.egress_prv_subnet_cidr_block
-  availability_zone = "us-east-2a"
+  availability_zone = var.availability_zones[0]
   tags = {
     Name = "${local.name}-egress-prv-subnet"
   }
@@ -20,7 +20,7 @@ resource "aws_subnet" "egress_vpc_prv_subnet" {
 resource "aws_subnet" "egress_vpc_pub_subnet" {
   vpc_id     = aws_vpc.egress_vpc.id
   cidr_block = var.egress_pub_subnet_cidr_block
-  availability_zone = "us-east-2a"
+  availability_zone = var.availability_zones[0]
   map_public_ip_on_launch = true
   tags = {
     Name = "${local.name}-egress-pub-subnet"
