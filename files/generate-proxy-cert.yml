@@ -1,0 +1,24 @@
+---
+
+- name: "Create Proxy certs"
+  hosts: localhost
+  gather_facts: false
+  vars:
+    playbook_dir: "./files"
+  tasks:
+    - name: Generate an OpenSSL private key.
+      openssl_privatekey:
+        path: squid-ca-key.pem
+
+    - name: Generate an OpenSSL CSR.
+      openssl_csr:
+        path: squid-ca.csr
+        privatekey_path: squid-ca-key.pem
+        basic_constraints: "CA:TRUE"
+
+    - name: Generate a Self Signed OpenSSL certificate.
+      openssl_certificate:
+        path: squid-ca-cert.pem
+        privatekey_path: squid-ca-key.pem
+        csr_path: squid-ca.csr
+        provider: selfsigned

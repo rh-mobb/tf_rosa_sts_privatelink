@@ -57,8 +57,7 @@ $ rosa create admin -c ${local.name}
 * Run the command provided above to log into the cluster
 
 * Find the URL of the cluster's console and log into it via your web browser
-$ rosa describe cluster -c mobb-infra -o json | jq -r .console.url
-
+$ rosa describe cluster -c ${local.name} -o json | jq -r .console.url
 
 EOF
   description = "ROSA cluster creation command"

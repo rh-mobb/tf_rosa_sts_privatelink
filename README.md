@@ -25,6 +25,13 @@ Using the code in the repo will require having the following tools installed:
 - The AWS CLI
 - The ROSA CLI
 - The OC CLI
+- Ansible
+
+## Create Squid Certificates
+
+   ```
+   ansible-playbook files/generate-proxy-cert.yml
+   ```
 
 ## Create the VPCs
 

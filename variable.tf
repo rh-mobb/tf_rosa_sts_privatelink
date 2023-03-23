@@ -1,3 +1,27 @@
+data "aws_ami" "rhel9" {
+  executable_users = ["self"]
+  owners = ["309956199498"]
+  most_recent      = true
+
+  filter {
+    name   = "name"
+    values = ["RHEL-9*"]
+  }
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+}
+
 variable "cluster_name" {
   type        = string
   default     = "mhs"
@@ -22,27 +46,15 @@ variable "bastion_key_loc" {
   description = "Public key for bastion host"
 }
 
-variable "bastion_ami" {
-  type        = string
-  default     = "ami-0ba62214afa52bec7"
-  description = "Bastion AMI"
-}
-
 variable "bastion_instance_type" {
   type        = string
   default     = "t2.micro"
   description = "Bastion instance type"
 }
 
-variable "proxy_ami" {
-  type        = string
-  default     = "ami-0ba62214afa52bec7"
-  description = "Proxy AMI"
-}
-
 variable "proxy_instance_type" {
   type        = string
-  default     = "m4.large"
+  default     = "t2.micro"
   description = "Proxy instance type"
 }
 

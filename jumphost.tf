@@ -48,7 +48,7 @@ resource "aws_instance" "jumphost" {
     module.rosa-privatelink-vpc,
     aws_security_group.jumphost
   ]
-  ami = var.bastion_ami
+  ami = data.aws_ami.rhel9.id
   instance_type = var.bastion_instance_type
   subnet_id = module.rosa-privatelink-vpc.rosa_subnet_ids[0]
   key_name = aws_key_pair.jumphost[count.index].key_name

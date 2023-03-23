@@ -3,7 +3,6 @@ terraform.tfstate
 terraform.tfstate.backup
 provider.tf.tmp
 graph.png
-
 .terraform.lock.hcl
 .terraform/
 rosa.plan
